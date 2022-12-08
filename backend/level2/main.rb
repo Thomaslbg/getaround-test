@@ -12,7 +12,7 @@ class Rental
   def write_json
     output = generate_output
     p output
-    File.write('level2/data/output.json', JSON.dump(output))
+    File.write('level2/data/output.json', JSON.pretty_generate(output))
   end
 
   private
@@ -41,18 +41,12 @@ class Rental
   end
 
   def calculator(rental_id, data_hash)
-    # find hash for rental
     rental_hash = @data_hash['rentals'].detect { |h| h['id'] == rental_id }
-    # find hash for car
     car_hash = @data_hash['cars'].detect { |h| h['id'] == rental_hash['car_id'] }
-    # calculate numb of days
     days = (Date.parse(rental_hash['end_date']).mjd - Date.parse(rental_hash['start_date']).mjd) + 1
     basic_price = car_hash['price_per_day']
-    # multiply it by price
     daily_price = decreasing_price(days, basic_price)
-    # multiply km by price per km
     km_price = rental_hash['distance'] * car_hash['price_per_km']
-
     daily_price + km_price
   end
 end

@@ -12,7 +12,7 @@ class Rental
   def write_json
     output = generate_output
     p output
-    File.write('level1/data/output.json', JSON.dump(output))
+    File.write('level1/data/output.json', JSON.pretty_generate(output))
   end
 
   private
