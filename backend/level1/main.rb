@@ -9,7 +9,6 @@ class Rental
     @data_hash = JSON.parse(file)
   end
 
-
   def write_json
     output = generate_output
     p output
@@ -21,27 +20,24 @@ class Rental
   def generate_output
     rentals = []
 
-    @data_hash["rentals"].each do |r|
-      rentals.push ({"id" => r["id"], "price" => calculator(r["id"], @data_hash) })
+    @data_hash['rentals'].each do |r|
+      rentals.push ({'id' => r['id'], 'price' => calculator(r['id'], @data_hash) })
     end
 
-    output = { "rentals" => rentals}
+    { 'rentals' => rentals}
   end
 
   def calculator(rental_id, data_hash)
     # find hash for rental
-    rental_hash = @data_hash["rentals"].detect  {|h| h["id"] == rental_id }
+    rental_hash = @data_hash['rentals'].detect { |h| h['id'] == rental_id }
     # find hash for car
-    car_hash = @data_hash["cars"].detect {|h| h["id"] == rental_hash["car_id"] }
-
+    car_hash = @data_hash['cars'].detect { |h| h['id'] == rental_hash['car_id'] }
     # calculate numb of days
-    days = (Date.parse(rental_hash["end_date"]).mjd  - Date.parse(rental_hash["start_date"]).mjd) + 1
-    # days =
+    days = (Date.parse(rental_hash['end_date']).mjd - Date.parse(rental_hash['start_date']).mjd) + 1
     # multiply it by price
-    daily_price = days * car_hash["price_per_day"]
-    # p daily_price
+    daily_price = days * car_hash['price_per_day']
     # multiply km by price per km
-    km_price = rental_hash["distance"] * car_hash["price_per_km"]
+    km_price = rental_hash['distance'] * car_hash['price_per_km']
 
     daily_price + km_price
   end
