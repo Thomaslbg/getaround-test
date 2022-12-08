@@ -39,7 +39,6 @@ data_hash["rentals"].each do |r|
   rentals.push ({"id" => r["id"], "price" => calculator(r["id"], data_hash) })
 end
 
-p rentals
 
 output = { "rentals" => rentals}
 # create a new method called calculate
