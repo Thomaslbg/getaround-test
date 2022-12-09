@@ -22,8 +22,8 @@ class Rental
 
     @data_hash['rentals'].each do |r|
       rentals.push ({ 'id' => r['id'],
-                      'price' => calculator(r['id'], @data_hash)['price'],
-                      'commission' => calculator(r['id'], @data_hash)['commission']
+                      'price' => calculator(r['id'])['price'],
+                      'commission' => calculator(r['id'])['commission']
                     })
     end
 
@@ -43,7 +43,7 @@ class Rental
     end.sum.to_i
   end
 
-  def calculator(rental_id, data_hash)
+  def calculator(rental_id)
     rental_hash = @data_hash['rentals'].detect { |h| h['id'] == rental_id }
     car_hash = @data_hash['cars'].detect { |h| h['id'] == rental_hash['car_id'] }
     days = (Date.parse(rental_hash['end_date']).mjd - Date.parse(rental_hash['start_date']).mjd) + 1
@@ -52,7 +52,6 @@ class Rental
     km_price = rental_hash['distance'] * car_hash['price_per_km']
     price = daily_price + km_price
     commission = commission(price, days)
-    p commission
     {'price' => price, "commission" => commission}
   end
 
